@@ -10,13 +10,34 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class SwerveSubSystem extends SubsystemBase {
-    private final SwerveModule frontLeft = new SwerveModule(4, 6, true, false, 0, 0, false); 
-    private final SwerveModule frontRight = new SwerveModule(1, 1, true, true, 1, 0, false); 
-    private final SwerveModule backLeft = new SwerveModule(2, 5, true, false, 2, 0, false); 
-    private final SwerveModule backRight = new SwerveModule(0, 2, false, true, 3, 0, false); 
 
+    private final SwerveModule frontLeft = new SwerveModule(
+        Constants.frontLeft, 
+        Constants.a_frontLeft, 
+        Constants.driveMotorReverse, 
+        Constants.angleMotorFoward, 
+        Constants.encoderOffsetRad, false); 
 
+    private final SwerveModule frontRight = new SwerveModule(
+        Constants.frontRight, 
+        Constants.a_frontRight, 
+        Constants.driveMotorReverse, 
+        Constants.angleMotorFoward, 
+        Constants.encoderOffsetRad, false); 
 
+    private final SwerveModule backLeft = new SwerveModule(
+        Constants.backLeft, 
+        Constants.a_backLeft, 
+        Constants.driveMotorReverse, 
+        Constants.angleMotorFoward, 
+        Constants.encoderOffsetRad, false); 
+        
+    private final SwerveModule backRight = new SwerveModule(
+        Constants.backRight, 
+        Constants.a_backRight, 
+        Constants.driveMotorReverse, 
+        Constants.angleMotorFoward, 
+        Constants.encoderOffsetRad, false); 
 
     public void stopModules(){
         frontLeft.stop();

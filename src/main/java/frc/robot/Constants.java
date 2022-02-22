@@ -18,16 +18,17 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
-    public static final double wheelDiameterMeters = Units.inchesToMeters(0); 
-    public static final double driveMotorGearRatio = 0; 
-    public static final double angleMotorGearRatio = 0; 
+    public static final double wheelDiameterMeters = Units.inchesToMeters(3.1); 
+    public static final double driveMotorGearRatio = 1 / 5.25; 
+    public static final double angleMotorGearRatio = 1 / 133.25; 
     public static final double driveRot2Meter = driveMotorGearRatio * Math.PI * wheelDiameterMeters; 
-    public static final double angleRot2Rad = angleMotorGearRatio * Math.PI * 2; 
+    public static final double angleRot2Rad =   Math.PI * 2 * angleMotorGearRatio; 
     public static final double driveRPM2MPS = driveRot2Meter / 60; 
     public static final double angleRPM2RPS = angleRot2Rad / 60; 
     public static final double kPangle = 1; 
-    public static final double MAXDriveSpeed = 9; 
-    public static final double Deadband = 0.05; 
+    //the max drive speed is small just for testing purposes. 
+    public static final double MAXDriveSpeed = 3; 
+    public static final double Deadband = 0.08; 
     
     //left and right distance 
     public static final double trackWidth = Units.inchesToMeters(30); 
@@ -39,6 +40,27 @@ public final class Constants {
         new Translation2d(wheelBase / 2, trackWidth /2), 
         new Translation2d(-wheelBase /2, -trackWidth /2),
         new Translation2d(-wheelBase /2, trackWidth /2)); 
+
+    //module constants 
+    public static final int frontRight = 1;
+    public static final int frontLeft = 4;
+    public static final int backRight = 0;
+    public static final int backLeft = 2;
+
+    public static final int a_frontRight = 1;
+    public static final int a_frontLeft = 6;
+    public static final int a_backRight = 2;
+    public static final int a_backLeft = 5;
+
+    public static final boolean driveMotorReverse = true; 
+    public static final boolean driveMotorForward = false;
+    
+    public static final boolean angleMotorReverse = true; 
+    public static final boolean angleMotorFoward = false; 
+
+    public static final double encoderOffsetRad = 0; 
+
+
 
 
 

@@ -8,16 +8,16 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
+import com.revrobotics.AnalogInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAnalogSensor.Mode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -28,8 +28,8 @@ public class SwerveModule {
     private final TalonFX driveMotor; 
 
     private final RelativeEncoder angleEncoder; 
-    private final AnalogOutput magEncoder;  
-
+    private final AnalogInput magEncoder;  
+     
 
     private final PIDController turningPidController; 
 
@@ -37,24 +37,19 @@ public class SwerveModule {
     private final double encoderOffsetRad; 
 
     public SwerveModule(int driveMotorID, int angleMotorID, boolean driveMotorReverse, boolean angleMotorReverse, 
-        int magEncoderID, double encoderOffsetRad, boolean encoderInverted){
+         double encoderOffsetRad, boolean encoderInverted){
 
         this.encoderOffsetRad = encoderOffsetRad; 
         this.encoderInverted = encoderInverted; 
-        
-        magEncoder = new AnalogOutput(magEncoderID); 
-    
-        
 
         driveMotor = new TalonFX(driveMotorID);  
         angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless); 
-
+    
         angleMotor.setInverted(angleMotorReverse); 
         driveMotor.setInverted(driveMotorReverse); 
 
-
-        
         angleEncoder = angleMotor.getEncoder();  
+        magEncoder = angleMotor.getAnalog(Mode.kRelative); 
 
         angleEncoder.setPositionConversionFactor(Constants.angleRot2Rad); 
         angleEncoder.setVelocityConversionFactor(Constants.angleRPM2RPS); 
@@ -62,13 +57,11 @@ public class SwerveModule {
         turningPidController = new PIDController(Constants.kPangle, 0, 0); 
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
-        
         driveMotor.configOpenloopRamp(0.75);
         driveMotor.configClosedloopRamp(0.75); 
         driveMotor.setNeutralMode(NeutralMode.Brake);
         angleMotor.setIdleMode(IdleMode.kBrake); 
         
-
         resetEncoders();
 
     }
@@ -88,7 +81,7 @@ public class SwerveModule {
     public double getAngleVel(){
         return angleEncoder.getVelocity(); 
     }
-
+    //not using the mag encoder right now because we can't get them to work properly with the spark controllers 
     public double getMagEncoder(){
         double angle = magEncoder.getVoltage() / RobotController.getVoltage5V(); 
         angle *= 2 * Math.PI; 
@@ -98,7 +91,8 @@ public class SwerveModule {
 
     public void resetEncoders(){
         driveMotor.setSelectedSensorPosition(0); 
-        angleEncoder.setPosition(getMagEncoder());
+        //angleEncoder.setPosition(getMagEncoder());
+        angleEncoder.setPosition(0); 
     }
 
     public SwerveModuleState getState(){
@@ -107,7 +101,7 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState state){
 
-        if(Math.abs(state.speedMetersPerSecond) < 0.001){
+        if(Math.abs(state.speedMetersPerSecond) < 0.005){
             stop();
             return;
         }
@@ -115,7 +109,7 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, getState().angle); 
         driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond / Constants.MAXDriveSpeed); 
         angleMotor.set(turningPidController.calculate(getAnglePos(), state.angle.getRadians()));
-        SmartDashboard.putString("Swerve["+ magEncoder.getChannel() + "] State", state.toString()); 
+        SmartDashboard.putString("Swerve["+ magEncoder.getVoltage() + "] State", state.toString()); 
     }
 
 

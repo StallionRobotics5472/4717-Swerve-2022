@@ -19,7 +19,7 @@ import frc.robot.subsystems.SwerveSubSystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubSystem swerveSubSystem = new SwerveSubSystem(); 
-  private XboxController driver = new XboxController(1);
+  private XboxController driver = new XboxController(0);
  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
