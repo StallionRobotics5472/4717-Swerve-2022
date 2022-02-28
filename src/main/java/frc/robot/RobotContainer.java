@@ -7,7 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Fire;
+import frc.robot.commands.IndexBall;
+import frc.robot.commands.ShootBall;
 import frc.robot.commands.SwerveJoystickCMD;
+import frc.robot.subsystems.Index;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubSystem;
 
 /**
@@ -19,7 +25,15 @@ import frc.robot.subsystems.SwerveSubSystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubSystem swerveSubSystem = new SwerveSubSystem(); 
+  private final Shooter shooter; 
+  private final ShootBall shootBall; 
+  private final Index index; 
+  private final IndexBall indexBall; 
+  private final Fire fire; 
+
   private XboxController driver = new XboxController(0);
+
+  
  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -27,7 +41,20 @@ public class RobotContainer {
     swerveSubSystem.setDefaultCommand(new SwerveJoystickCMD(swerveSubSystem, 
     () -> -driver.getRawAxis(1), 
     () -> driver.getRawAxis(0),
-    () -> driver.getRawAxis(4)));
+    () -> driver.getRawAxis(4),
+    () -> !driver.getAButton()));
+
+    shooter = new Shooter(); 
+    shootBall = new ShootBall(shooter);
+    shootBall.addRequirements(shooter);
+
+    index = new Index();
+    indexBall = new IndexBall(index); 
+    indexBall.addRequirements(index);
+    fire = new Fire(index);
+    fire.addRequirements(index);
+
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -40,6 +67,16 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     
+    new JoystickButton(driver, XboxController.Button.kB.value).whenPressed(() -> swerveSubSystem.zeroHeading()); 
+
+    JoystickButton shootButton = new JoystickButton(driver, XboxController.Button.kA.value);  
+    shootButton.toggleWhenPressed(new ShootBall(shooter));  
+    
+    JoystickButton indexButton = new JoystickButton(driver, XboxController.Button.kX.value);
+    indexButton.toggleWhenPressed(new IndexBall(index)); 
+
+    JoystickButton fireButton = new JoystickButton(driver, XboxController.Button.kY.value); 
+    fireButton.whileHeld(new Fire(index)); 
 
   }
 

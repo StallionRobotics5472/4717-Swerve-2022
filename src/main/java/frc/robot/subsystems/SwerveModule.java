@@ -8,18 +8,15 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.revrobotics.AnalogInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAnalogSensor.Mode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -28,8 +25,10 @@ public class SwerveModule {
     private final TalonFX driveMotor; 
 
     private final RelativeEncoder angleEncoder; 
-    private final AnalogInput magEncoder;  
-     
+
+    // private final DutyCycle magEncoder;
+    // private final DigitalSource encoder; 
+    
 
     private final PIDController turningPidController; 
 
@@ -49,13 +48,14 @@ public class SwerveModule {
         driveMotor.setInverted(driveMotorReverse); 
 
         angleEncoder = angleMotor.getEncoder();  
-        magEncoder = angleMotor.getAnalog(Mode.kRelative); 
-
+        // encoder = new DigitalInput(8); 
+        // magEncoder = new DutyCycle(encoder); 
+        
         angleEncoder.setPositionConversionFactor(Constants.angleRot2Rad); 
         angleEncoder.setVelocityConversionFactor(Constants.angleRPM2RPS); 
         
-        turningPidController = new PIDController(Constants.kPangle, 0, 0); 
-        turningPidController.enableContinuousInput(-Math.PI, Math.PI);
+        turningPidController = new PIDController(Constants.kPangle, Constants.kIangle, Constants.kDangle); 
+        turningPidController.enableContinuousInput(-Math.PI , Math.PI);
 
         driveMotor.configOpenloopRamp(0.75);
         driveMotor.configClosedloopRamp(0.75); 
@@ -63,7 +63,6 @@ public class SwerveModule {
         angleMotor.setIdleMode(IdleMode.kBrake); 
         
         resetEncoders();
-
     }
 
     public double getDrivePos(){
@@ -77,17 +76,18 @@ public class SwerveModule {
     public double getDriveVel(){
         return driveMotor.getSelectedSensorVelocity(); 
     }
-
+    
     public double getAngleVel(){
         return angleEncoder.getVelocity(); 
     }
+    
     //not using the mag encoder right now because we can't get them to work properly with the spark controllers 
-    public double getMagEncoder(){
-        double angle = magEncoder.getVoltage() / RobotController.getVoltage5V(); 
-        angle *= 2 * Math.PI; 
-        angle -= encoderOffsetRad; 
-        return angle * (encoderInverted ? -1.0 : 1.0); 
-    }
+    // public double getMagEncoder(){
+    //     double angle = magEncoder.getOutput(); 
+    //     angle *= 2 * Math.PI; 
+    //     angle -= encoderOffsetRad; 
+    //     return angle * (encoderInverted ? -1.0 : 1.0); 
+    // }
 
     public void resetEncoders(){
         driveMotor.setSelectedSensorPosition(0); 
@@ -99,20 +99,20 @@ public class SwerveModule {
         return new SwerveModuleState(getDriveVel(), new Rotation2d(getAnglePos())); 
     }
 
+
     public void setDesiredState(SwerveModuleState state){
 
-        if(Math.abs(state.speedMetersPerSecond) < 0.005){
+        if(Math.abs(state.speedMetersPerSecond) < 0.001){
             stop();
             return;
         }
-
+        
         state = SwerveModuleState.optimize(state, getState().angle); 
         driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond / Constants.MAXDriveSpeed); 
         angleMotor.set(turningPidController.calculate(getAnglePos(), state.angle.getRadians()));
-        SmartDashboard.putString("Swerve["+ magEncoder.getVoltage() + "] State", state.toString()); 
+        //SmartDashboard.putString("Swerve["+ magEncoder.getVoltage() + "] State", state.toString()); 
     }
-
-
+    
     public void stop(){
         angleMotor.set(0);
         driveMotor.set(ControlMode.PercentOutput, 0);

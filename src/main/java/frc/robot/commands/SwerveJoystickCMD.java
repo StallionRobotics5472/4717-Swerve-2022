@@ -18,16 +18,20 @@ public class SwerveJoystickCMD extends CommandBase {
 
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction; 
 
+    private final Supplier<Boolean> fieldOrientedFunction;
+    
+
   public SwerveJoystickCMD(SwerveSubSystem swerveSubsystem, Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, 
-    Supplier<Double> turningSpdFunction) {
+    Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction) {
       this.swerveSubSystem = swerveSubsystem; 
       this.xSpdFunction = xSpdFunction; 
       this.ySpdFunction = ySpdFunction; 
       this.turningSpdFunction = turningSpdFunction; 
+      this.fieldOrientedFunction = fieldOrientedFunction;
       addRequirements(swerveSubsystem);
   }
 
-
+  
   @Override
   public void initialize() {}
 
@@ -41,8 +45,15 @@ public class SwerveJoystickCMD extends CommandBase {
     ySpeed = Math.abs(ySpeed) > Constants.Deadband ? ySpeed : 0; 
     turningSpeed = Math.abs(turningSpeed) > Constants.Deadband ? turningSpeed : 0; 
     
-    ChassisSpeeds chassisSpeeds; 
-    chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed); 
+    ChassisSpeeds chassisSpeeds;
+    if (fieldOrientedFunction.get()) {
+      // Relative to field
+      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+              xSpeed, ySpeed, turningSpeed, swerveSubSystem.getRotation2d());
+    } else {
+      // Relative to robot
+      chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+    } 
 
     SwerveModuleState[] moduleStates = Constants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds); 
 
