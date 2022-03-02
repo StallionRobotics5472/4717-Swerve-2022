@@ -41,8 +41,7 @@ public class RobotContainer {
     swerveSubSystem.setDefaultCommand(new SwerveJoystickCMD(swerveSubSystem, 
     () -> -driver.getRawAxis(1), 
     () -> driver.getRawAxis(0),
-    () -> driver.getRawAxis(4),
-    () -> !driver.getAButton()));
+    () -> driver.getRawAxis(4))); 
 
     shooter = new Shooter(); 
     shootBall = new ShootBall(shooter);
@@ -59,7 +58,7 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  /**
+  /**x`
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
@@ -67,7 +66,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     
-    new JoystickButton(driver, XboxController.Button.kB.value).whenPressed(() -> swerveSubSystem.zeroHeading()); 
+    //new JoystickButton(driver, XboxController.Button.kRightBumper.value).whenPressed(() -> swerveSubSystem.zeroHeading()); 
 
     JoystickButton shootButton = new JoystickButton(driver, XboxController.Button.kA.value);  
     shootButton.toggleWhenPressed(new ShootBall(shooter));  
@@ -79,7 +78,7 @@ public class RobotContainer {
     fireButton.whileHeld(new Fire(index)); 
 
   }
-
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

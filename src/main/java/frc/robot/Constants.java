@@ -26,14 +26,14 @@ public final class Constants {
     public static final double angleRot2Rad =   Math.PI * 2 * angleMotorGearRatio; 
     public static final double driveRPM2MPS = driveRot2Meter / 60; 
     public static final double angleRPM2RPS = angleRot2Rad / 60; 
-    public static final double kPangle = 0.2; 
+    public static final double kPangle = 0.6; 
     public static final double kIangle = 0; 
     public static final double kDangle = 0; 
     //the max drive speed is small just for testing purposes. 
-    public static final double MAXDriveSpeed = 2; 
+    public static final double MAXDriveSpeed = 3; 
     public static final double Deadband = 0.2; 
     
-    //left and right distance 
+    //left and right distance  
     public static final double trackWidth = Units.inchesToMeters(26); 
     //front and back distance
     public static final double wheelBase = Units.inchesToMeters(26);
@@ -45,15 +45,15 @@ public final class Constants {
         new Translation2d(-wheelBase /2, trackWidth /2)); 
 
     //module constants 
-    public static final int frontRight = 2;
-    public static final int frontLeft = 1;
-    public static final int backRight = 0;
-    public static final int backLeft = 4;
+    public static final int frontRight = 0;
+    public static final int frontLeft = 2;
+    public static final int backRight = 4;
+    public static final int backLeft = 1;
 
-    public static final int a_frontRight = 1;
-    public static final int a_frontLeft = 5;
-    public static final int a_backRight = 2;
-    public static final int a_backLeft = 6;
+    public static final int a_frontRight = 2;
+    public static final int a_frontLeft = 1;
+    public static final int a_backRight = 6;
+    public static final int a_backLeft = 5;
 
     public static final boolean driveMotorReverse = true; 
     public static final boolean driveMotorForward = false;
@@ -61,13 +61,13 @@ public final class Constants {
     public static final boolean angleMotorReverse = true; 
     public static final boolean angleMotorFoward = false; 
 
-    public static final double encoderOffsetRad = 0; 
+    public static final double encoderOffsetRad = 4.376396; 
 
     //shooter
     public static final int LEFT_SHOOT = 3; 
     public static final int RIGHT_SHOOT = 5; 
     public static final double shootRamp = 0.2;
-    public static final double shootSpeed = 0.7; 
+    public static final double shootSpeed = 0.6; 
     //index
     public static final int leftIndex = 4; 
     public static final int rightIndex = 3; 

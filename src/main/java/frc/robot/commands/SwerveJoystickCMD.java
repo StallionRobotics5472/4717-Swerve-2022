@@ -18,16 +18,16 @@ public class SwerveJoystickCMD extends CommandBase {
 
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction; 
 
-    private final Supplier<Boolean> fieldOrientedFunction;
+   // private final Supplier<Boolean> fieldOrientedFunction;
     
 
   public SwerveJoystickCMD(SwerveSubSystem swerveSubsystem, Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, 
-    Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction) {
+    Supplier<Double> turningSpdFunction) {
       this.swerveSubSystem = swerveSubsystem; 
       this.xSpdFunction = xSpdFunction; 
       this.ySpdFunction = ySpdFunction; 
       this.turningSpdFunction = turningSpdFunction; 
-      this.fieldOrientedFunction = fieldOrientedFunction;
+     // this.fieldOrientedFunction = fieldOrientedFunction;
       addRequirements(swerveSubsystem);
   }
 
@@ -46,14 +46,15 @@ public class SwerveJoystickCMD extends CommandBase {
     turningSpeed = Math.abs(turningSpeed) > Constants.Deadband ? turningSpeed : 0; 
     
     ChassisSpeeds chassisSpeeds;
-    if (fieldOrientedFunction.get()) {
-      // Relative to field
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-              xSpeed, ySpeed, turningSpeed, swerveSubSystem.getRotation2d());
-    } else {
-      // Relative to robot
-      chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
-    } 
+    // if (fieldOrientedFunction.get()) {
+    //   // Relative to field
+    //   chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+    //           xSpeed, ySpeed, turningSpeed);
+    // } else {
+    //   // Relative to robot
+    //   chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
+    // }
+    chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
 
     SwerveModuleState[] moduleStates = Constants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds); 
 

@@ -39,7 +39,7 @@ public class Index extends SubsystemBase {
   }
 
   public void fire(double speed){
-    fire.set(0.8);
+    fire.set(0.5);
     indexBall(speed);
   }
 
