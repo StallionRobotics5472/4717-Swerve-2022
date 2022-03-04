@@ -41,11 +41,12 @@ public class Index extends SubsystemBase {
   public void indexBall(double speed){
     index1.set(speed);
     index2.set(speed);
+    
   
-    if(limitSwitch.get()){
-        fireMotor.set(0.3);
-    }
-    // else{
+    // if(limitSwitch.get()){
+    //     fireMotor.set(0.3);
+    // }
+    //  else{
     //   fireMotor.set(0);
     // }
     
@@ -61,10 +62,9 @@ public class Index extends SubsystemBase {
     index1.set(-0.5);
     index2.set(-0.5);
   
-    if(limitSwitch.get()){
-        fireMotor.set(0.3);
-    }
-    
+    // if(limitSwitch.get()){
+    //     fireMotor.set(0.3);
+    // }
 
   }
 

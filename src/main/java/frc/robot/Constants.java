@@ -31,6 +31,7 @@ public final class Constants {
     public static final double kDangle = 0; 
     //the max drive speed is small just for testing purposes. 
     public static final double MAXDriveSpeed = 3; 
+    public static final double autoDriveSpeed = 0.2; 
     public static final double Deadband = 0.2; 
     
     //left and right distance  
