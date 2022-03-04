@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.FastIndex;
 import frc.robot.commands.Fire;
 import frc.robot.commands.IndexBall;
 import frc.robot.commands.ShootBall;
@@ -30,6 +31,7 @@ public class RobotContainer {
   private final Index index; 
   private final IndexBall indexBall; 
   private final Fire fire; 
+  private final FastIndex fastIndex; 
 
   private XboxController driver = new XboxController(0);
 
@@ -52,6 +54,8 @@ public class RobotContainer {
     indexBall.addRequirements(index);
     fire = new Fire(index);
     fire.addRequirements(index);
+    fastIndex = new FastIndex(index); 
+    fastIndex.addRequirements(index);
 
 
     // Configure the button bindings
@@ -76,6 +80,9 @@ public class RobotContainer {
 
     JoystickButton fireButton = new JoystickButton(driver, XboxController.Button.kY.value); 
     fireButton.whileHeld(new Fire(index)); 
+    
+    JoystickButton fastIndexButton = new JoystickButton(driver, XboxController.Button.kB.value); 
+    fastIndexButton.toggleWhenPressed(new FastIndex(index)); 
 
   }
   
