@@ -20,14 +20,14 @@ public class SwerveSubSystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
         Constants.frontLeft, 
         Constants.a_frontLeft, 
-        Constants.driveMotorReverse, 
+        Constants.driveMotorForward, 
         Constants.angleMotorFoward, 
         Constants.encoderOffsetRad, false); 
 
     private final SwerveModule frontRight = new SwerveModule(
         Constants.frontRight, 
         Constants.a_frontRight, 
-        Constants.driveMotorReverse, 
+        Constants.driveMotorForward, 
         Constants.angleMotorFoward, 
         Constants.encoderOffsetRad, false); 
 
